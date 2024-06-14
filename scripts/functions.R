@@ -1,8 +1,12 @@
+#pacakges used (need to be installed first)
 library(readr)
 library(stringr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(viridis)
+library(ggpubr)
+library(ggtext)
 
 #define output directory 
 plot_dir<-"../figures/"
@@ -30,7 +34,7 @@ masc_into_gynodioecy<-function(k, theta, delta){
 		masculiniser_invasion_condition(theta, delta))
 }
 
-#This function, only applies where gynodioecy evolves. 
+#This function returns the masculiniser invasion condition but only applies where gynodioecy evolves. 
 masc_into_gynodioecy2<-function(k, theta, delta){
 	ifelse(feminiser_invasion_condition(theta, delta)-k<0,
 		(1+(1-2*delta)*theta)/(k-(1-2*delta)*theta),
@@ -43,6 +47,12 @@ masc_into_gynodioecy_dom_dom<-function(k, theta, delta){
 		((1+k)+2*(1-delta)*theta)/((1+k)-2*(1-delta)*theta),
 		masculiniser_invasion_condition(theta, delta))
 }
+
+#This function is used to plot the contour for invasion in terms of inbreeding depression (delta) for a specified k and theta. Used to add lines to the invasion plot
+feminiser_invasion_condition_delta<-function(k, theta){
+	(1-k)/(2*theta)
+}
+
 
 #Not used in paper, equilibrium frequencies of females and males
 gynodioecy_female_freq<-function(k, theta, delta){
@@ -86,7 +96,7 @@ Rcrit<-function(k, theta, delta,KK){
 ###################
 
 #function to convert p (frequency of A2 allele), the inbreeding coefficient (usually called F), and F2 and M2 (frequency of the feminising and masculinising mutations). 
-startgen_strings <- read_file("../Results/Recursions/TwoLocusStartGen.txt")
+startgen_strings <- read_file("../Results/recursions/TwoLocusStartGen.txt")
 inputStartGen<-str_remove(startgen_strings, "InputForm\\[\\{") %>% str_remove("\\}\\]$") %>% str_split(pattern=", ") %>% unlist()
 startgen<-function(F2, M2){
 	as.numeric(lapply(inputStartGen, function(x)(eval(parse(text=x)))))
@@ -121,7 +131,7 @@ freqM2<-function(x){
 #function to run simulation
 runSim<-function(sta, end=0.0001, Rec, k, KK, theta, delta, F2dom, M2dom, F2epidom, M2epidom, min_generations=100, max_generations=5000){
 	#read in recursions outputted from Mathematica
-	recursions_strings <- read_file(paste0("../Results/Recursions/TwoLocusRecursions.txt"))
+	recursions_strings <- read_file(paste0("../results/recursions/TwoLocusRecursions.txt"))
 	inputRecursions<-str_remove(recursions_strings, "InputForm\\[\\{") %>% str_remove("\\}\\]$") %>% str_split(pattern=", ") %>% unlist()
 	recursions<-function(pop, Rec, k, KK, theta, delta, F2dom, M2dom, F2epidom, M2epidom){
 		as.numeric(lapply(inputRecursions, function(x)(eval(parse(text=x)))))
@@ -277,8 +287,66 @@ sex_and_allele_plot<-function(df){
 	#split by invasion
 	facet_wrap(~invasion, scales="free") +
 	#colours
-	scale_fill_brewer(palette = "Dark2") +
-	scale_colour_manual(values=c("grey70", "grey30")) +
+	scale_fill_manual(values=c(cp[1], "grey80", "grey30", cp[4])) +
+	scale_colour_manual(values=c(cp[2], cp[3])) +
 	basic_theme_border
+
+}
+
+invasion_sim_plot<-function(df, type="feminiser"){
+	
+	#first we select the relevant columns to plot the sex frequencies
+	sexfreqs<-gather(df[,c("generation", "males", "females", "cosex", "F2dom", "M2dom", "F2epidom", "M2epidom")], key="sex", value="frequency", -c("generation", "F2dom", "M2dom", "F2epidom", "M2epidom"))
+	sexfreqs$sex<-factor(sexfreqs$sex, levels=c("cosex", "females", "males"))
+	#then we use another table to plot the allele frequencies 
+	allelefreqs_tmp<-gather(df[,c("generation", "F2dom", "M2dom", "F2epidom", "M2epidom", "freqF2", "freqM2")], key="allele", value="frequency", -c("generation", "F2dom", "M2dom", "F2epidom", "M2epidom"))
+	
+	#There are two things that change between the plots for the feminiser and the masculiniser invasions. 
+	#First, the feminiser invasion plots do not include the masculiniser
+	#Second, the colour of the text for the panels and legend 
+	if(type=="feminiser"){
+	allelefreqs<-mutate(allelefreqs_tmp, 
+	frequency=ifelse(allele=="freqF2", frequency, NA),
+	double_dominance=factor(ifelse(F2dom==1,
+		"<b style='color:#d95f02;'>dominant </b><br>",
+		"<b style='color:#d95f02;'>recessive</b><br>")),
+	allele=factor(ifelse(allele=="freqF2",
+		"<b style='color:#d95f02;'>feminiser</b>",
+		"<b style='color:#7570b3;'>masculiniser</b>"
+		), levels=c("<b style='color:#d95f02;'>feminiser</b>","<b style='color:#7570b3;'>masculiniser</b>")))
+	} else {
+	allelefreqs<-mutate(allelefreqs_tmp, double_dominance=factor(ifelse(F2dom==1,
+	ifelse(M2dom==1,
+		"<b style='color:#d95f02;'>dominant </b><br><b style='color: #7570b3;'>dominant </b>",
+		"<b style='color:#d95f02;'>dominant</b><br><b style='color: #7570b3;'>recessive</b>"),
+	ifelse(M2dom==1,
+		"<b style='color:#d95f02;'>recessive</b><br><b style='color: #7570b3;'>dominant </b>",
+		"<b style='color:#d95f02;'>recessive</b><br><b style='color: #7570b3;'>recessive</b>"))),
+	allele=factor(ifelse(allele=="freqF2",
+		"<b style='color:#d95f02;'>feminiser</b>",
+		"<b style='color:#7570b3;'>masculiniser</b>"
+		), levels=c("<b style='color:#d95f02;'>feminiser</b>","<b style='color:#7570b3;'>masculiniser</b>")))
+	sexfreqs<-mutate(sexfreqs, double_dominance=factor(ifelse(F2dom==1,
+	ifelse(M2dom==1,
+		"<b style='color:#d95f02;'>dominant </b><br><b style='color: #7570b3;'>dominant </b>",
+		"<b style='color:#d95f02;'>dominant</b><br><b style='color: #7570b3;'>recessive</b>"),
+	ifelse(M2dom==1,
+		"<b style='color:#d95f02;'>recessive</b><br><b style='color: #7570b3;'>dominant </b>",
+		"<b style='color:#d95f02;'>recessive</b><br><b style='color: #7570b3;'>recessive</b>"))))	
+	}
+	
+	ggplot() +
+	#plot the sex frequencies using geom_area
+	geom_area(data= sexfreqs, aes(x=generation, y=frequency, group=sex, fill=sex)) +
+	#allele frequencies using geom_line
+	geom_line(data=allelefreqs, aes(x=generation, y=frequency, group=allele, colour=allele), size=1) +
+	facet_wrap(~ double_dominance, scales="free_x", nrow=1) +
+	#colours
+	scale_fill_manual(values=c(cp[1], "grey80", "grey30")) +
+	scale_colour_manual(values=c(cp[2], cp[3])) +
+	basic_theme_border +
+	theme(strip.text=element_markdown(), legend.text=element_markdown(size=text_size), legend.position="top", legend.title=element_blank()) +
+	guides(fill=guide_legend(order=2),
+			colour=guide_legend(order=1))
 
 }

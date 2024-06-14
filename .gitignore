@@ -2,3 +2,5 @@
 *.eps
 *.jpeg
 *.tiff
+.DS_Store
+.Rapp.history

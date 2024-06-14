@@ -1,0 +1,29 @@
+#!/bin/bash
+#SBATCH --job-name=create_parameter_grid #Job name
+#SBATCH --mail-type=ALL                    #Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-user=xfs20awu@uea.ac.uk           # Where to send mail - change <username> to your  userid
+#SBATCH -t 1:00:00                               # Set time limit to 36 hours
+#SBATCH -o logfiles/%x.out                    #Standard output log  
+#SBATCH -e logfiles/%x.err                     #Standard error log
+#SBATCH --mem 1G
+
+#set up environment
+module add R/4.0.0
+
+# Set the working directory to the directory of this script
+cd "$(dirname "$0")"
+
+#run Rscript directly from submission script
+Rscript --vanilla - <<EOF
+
+source("functions.R")
+
+grid_search<-expand.grid(theta=seq(0.1,1,0.1), delta=seq(0.1,1,0.1), k=seq(0.1,1,0.1), K=seq(0.2,2,0.2), Rec=c(0.1,0.5), F2dom=c(0,1), M2dom=c(0,1), F2epidom=c(0,1), M2epidom=c(0,1)) %>%
+        filter(F2epidom==0 | M2epidom==0) %>%
+        filter(F2epidom==1 | M2epidom==1) %>%
+        mutate(fem_inv=feminiser_invasion_condition(theta, delta)-k, masc_into_gyn=masc_into_gynodioecy(k, theta, delta)-K) %>%
+        filter(fem_inv< -0.01 & masc_into_gyn< -0.1)
+
+write_csv(grid_search, path="../results/simulations/parameter_grid.csv")
+
+EOF

@@ -1,0 +1,38 @@
+#!/bin/bash
+#SBATCH --job-name=combine_tables
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=xfs20awu@uea.ac.uk
+#SBATCH -t 1:00:00
+#SBATCH -o logfiles/%x.out
+#SBATCH -e logfiles/%x.err
+#SBATCH --mem 1G
+
+#set up environment
+module add R/4.0.0
+
+# Set the working directory to the directory of this script
+cd "$(dirname "$0")"
+
+#run Rscript directly from submission script
+Rscript --vanilla - <<EOF
+
+source("functions.R")
+
+basename<-"final_frequencies"
+file_list<-list.files(path="../results/simulations/", pattern=basename)
+tbls<-list()
+i=1
+for(i in seq(1,length(file_list))){
+	tbls[[i]]<-read_tsv(paste0("../results/simulations/", file_list[i]))
+}
+tbl<-do.call(rbind, tbls) %>%
+	mutate(
+	feminiser_dominance=ifelse(B2dom==1, "dominant feminiser", "recessive feminiser"),
+	masculiniser_dominance =ifelse(C2dom==1, "dominant masculiniser", "recessive masculiniser"),
+	epistatic_dominance=ifelse(B2epidom==1, "double mutant female", "double mutant male"),
+	masculiniser=freqM2, 
+	feminiser=freqF2) 
+
+write_tsv(tbl, path="../results/simulations/fig3_final_frequencies.tsv"
+
+EOF
