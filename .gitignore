@@ -4,3 +4,6 @@
 *.tiff
 .DS_Store
 .Rapp.history
+results/simulations/parameter_grid.csv
+results/simulations/final_frequencies*
+scripts/logfiles

@@ -8,7 +8,7 @@
 
 create_parameter_grid_id=$(sbatch --parsable create_fig3_data1.sub)
 
-run_simulations_array_id=$(sbatch --parsable --dependence=afterok:$create_parameter_grid_id create_fig3_data2.sub)
+run_simulations_array_id=$(sbatch --parsable --dependency=afterok:$create_parameter_grid_id create_fig3_data2.sub)
 
 combine_tables_id=$(sbatch --parsable --dependency=afterok:$run_simulations_array_id create_fig3_data3.sub)
 

@@ -10,9 +10,6 @@
 #set up environment
 module add R/4.0.0
 
-# Set the working directory to the directory of this script
-cd "$(dirname "$0")"
-
 #run Rscript directly from submission script
 Rscript --vanilla - <<EOF
 
