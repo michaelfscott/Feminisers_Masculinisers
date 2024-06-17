@@ -17,12 +17,8 @@ M2epidom=1 #M2epidom, epistatic dominance of the masculinising allele (valid val
 min_generations=100 #min_generations, minimum number of generations to run before the simulation ends
 max_generations=5000 #max_generations, maximum number of generations before the simulation ends
 
-#run the simulation for the invasion of a feminiser, which will reach equilibrium before a masculiniser is introduced
-res=runSim_Fem_Masc(startFreqF2, startFreqM2, end, Rec, k, KK, theta, delta, F2dom, M2dom, F2epidom, M2epidom, min_generations, max_generations)
 
-#produce plot
-plt<-sex_and_allele_plot(res)
-
-#save plot
-ggsave(filename=paste0(plot_dir,"example.png"), plot=plt, width=6, height=2.7)
-
+#to produce the simulations used for figure 2
+dom_comb<-rbind(data.frame(expand.grid(F2dom=c(0,1), M2dom=c(0,1)), F2epidom=0, M2epidom=1), data.frame(expand.grid(F2dom=c(0,1), M2dom=c(0,1)), F2epidom=1, M2epidom=0)) #first get the eight combinations of dominance and double mutant phenotype
+res=do.call(rbind,lapply(1:nrow(dom_comb), function(x)(runSim_Fem_Masc(startFreqF2, startFreqM2, end, Rec, k, KK, theta, delta, F2dom=dom_comb[x,1], M2dom=dom_comb[x,2], F2epidom=dom_comb[x,3], M2epidom=dom_comb[x,4], min_generations, max_generations)))) #run simulation for each combination and combine output tables
+write_tsv(res, file="../results/simulations/fig2_simulation.tsv") #write output
