@@ -20,9 +20,10 @@ We provide an [example script](scripts/example.R) that will numerically iterate 
 ## Generate Figures
 
 The scripts used to generate the three figures in the paper are 
-* [figure 1 script](scripts/fig1.R)
-* [figure 2 script](scripts/fig2.R)
-* [figure 3 script](scripts/fig3.R)
+* [figure 1 script](scripts/fig1_invasion_conditions.R)
+* [figure 2 script](scripts/fig2_simulation_example.R)
+* [figure 3 script](scripts/fig3_final_freq.R)
+
 We have provided the data to make these figures in [results/simulations](results/simulations/).
 
 ## Regenerate Figure Data
@@ -31,7 +32,7 @@ The scripts used to run simulations to create the data in the figures are
 * [create figure 2 data](scripts/create_fig2_data.R), which is not computationally demanding and can be run locally. 
 * [create figure 3 data](scripts/create_fig3_data.sh), which calls three subscripts that were submitted to an HPC cluster with a SLURM scheduler
     * [create parameter combinations](scripts/create_fig3.data1.sub), which has a short embedded R script to generate the parameter combinations 
-    * [run simulations](scripts/create_fig3_data2.sub), which submits parallel array jobs that call an [R script](scripts/create_fig3_data2.R).
+    * [run simulations](scripts/create_fig3_data2.sub), which submits parallel array jobs to run simulations via an [R script](scripts/create_fig3_data2.R).
     * [combine results](scripts/create_fig3_data3.sub), which contains a short embedded R script to combine the final allele frequencies into a [table](results/simulations/fig3_final_frequencies.tsv). 
 
 ## Author
