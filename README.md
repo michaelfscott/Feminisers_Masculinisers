@@ -35,6 +35,8 @@ The scripts used to run simulations to create the data in the figures are
     * [run simulations](scripts/create_fig3_data2.sub), which submits parallel array jobs to run simulations via an [R script](scripts/create_fig3_data2.R).
     * [combine results](scripts/create_fig3_data3.sub), which contains a short embedded R script to combine the final allele frequencies into a [table](results/simulations/fig3_final_frequencies.tsv). 
 
+The output can be found in [figures/](figures/).
+
 ## Author
 
 Michael F Scott
