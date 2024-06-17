@@ -24,7 +24,7 @@ res=runSim_Fem_Masc(startFreqF2, startFreqM2, end, Rec, k, KK, theta, delta, F2d
 plt<-sex_and_allele_plot(res)
 
 #save plot
-ggsave(filename=paste0(plot_dir,"example.pdf"), plot=plt, width=6, height=3)
+ggsave(filename=paste0(plot_dir,"example.png"), plot=plt, width=6, height=2.7)
 
 ###to produce the simulations used for figure 2, uncomment the following 
 #dom_comb<-rbind(data.frame(expand.grid(F2dom=c(0,1), M2dom=c(0,1)), F2epidom=0, M2epidom=1), data.frame(expand.grid(F2dom=c(0,1), M2dom=c(0,1)), F2epidom=1, M2epidom=0)) #first get the eight combinations of dominance and double mutant phenotype
