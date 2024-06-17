@@ -15,8 +15,9 @@ install.packages(c("readr", "stringr", "dplyr", "tidyr", "ggplot2", "viridis", "
 
 ### Quick Start Example
 
-We provide an [example script](scripts/example.R) that will numerically iterate invasion by a feminiser and then a masculiniser, allowing exploration of different parameters and producing a plot like this: 
+We provide an [example script](scripts/example.R) that will numerically iterate invasion by a feminiser and then a masculiniser. You can edit the parameters in this file to explore different parameter combinations. This script produces a plot like this:
 
+<img src=""./figures/example.png width="300" height="135" />
 ![Example of a transition from cosexuality to dioecy](./figures/example.png)
 
 ## Author
