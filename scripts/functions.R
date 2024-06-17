@@ -5,8 +5,8 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(viridis)
-library(ggpubr)
-library(ggtext)
+#library(ggpubr)
+#library(ggtext)
 
 #define output directory 
 plot_dir<-"../figures/"
@@ -96,7 +96,7 @@ Rcrit<-function(k, theta, delta,KK){
 ###################
 
 #function to convert p (frequency of A2 allele), the inbreeding coefficient (usually called F), and F2 and M2 (frequency of the feminising and masculinising mutations). 
-startgen_strings <- read_file("../Results/recursions/TwoLocusStartGen.txt")
+startgen_strings <- read_file("../results/recursions/TwoLocusStartGen.txt")
 inputStartGen<-str_remove(startgen_strings, "InputForm\\[\\{") %>% str_remove("\\}\\]$") %>% str_split(pattern=", ") %>% unlist()
 startgen<-function(F2, M2){
 	as.numeric(lapply(inputStartGen, function(x)(eval(parse(text=x)))))
