@@ -24,7 +24,9 @@ The scripts used to generate the three figures in the paper are
 * [figure 2 script](scripts/fig2_simulation_example.R)
 * [figure 3 script](scripts/fig3_final_freq.R)
 
-We have provided the data to make these figures in [results/simulations](results/simulations/).
+The figures generated are in [figures/](figures/).
+
+We have provided the data to make these figures in [results/simulations](results/simulations/). This data was generated using the scripts below. 
 
 ## Regenerate Figure Data
 
@@ -35,7 +37,7 @@ The scripts used to run simulations to create the data in the figures are
     * [run simulations](scripts/create_fig3_data2.sub), which submits parallel array jobs to run simulations via an [R script](scripts/create_fig3_data2.R).
     * [combine results](scripts/create_fig3_data3.sub), which contains a short embedded R script to combine the final allele frequencies into a [table](results/simulations/fig3_final_frequencies.tsv). 
 
-The output can be found in [figures/](figures/).
+The outputs from these simulations are in [results/simulations](results/simulations/). 
 
 ## Author
 
