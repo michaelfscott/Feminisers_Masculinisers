@@ -24,9 +24,7 @@ The scripts used to generate the three figures in the paper are
 * [figure 2 script](scripts/fig2_simulation_example.R)
 * [figure 3 script](scripts/fig3_final_freq.R)
 
-The figures generated are in [figures/](figures/).
-
-We have provided the data to make these figures in [results/simulations](results/simulations/). This data was generated using the scripts below. 
+The figures generated are in [figures/](figures/). We have provided the data to make the figures in [results/simulations](results/simulations/). This data was generated using the scripts below. 
 
 ## Regenerate Figure Data
 
