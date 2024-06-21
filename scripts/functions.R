@@ -277,7 +277,8 @@ sex_and_allele_plot<-function(df){
 	sexfreqs<-gather(df[,c("generation", "invasion", "males", "females", "cosex","sterile")], key="sex", value="frequency", -c("generation", "invasion"))
 	sexfreqs$sex<-factor(sexfreqs$sex, levels=c("cosex", "females", "males","sterile"))
 	#then we use another table to plot the allele frequencies 
-	allelefreqs<-gather(df[,c("generation", "invasion", "freqF2", "freqM2")], key="allele", value="frequency", -c("generation", "invasion"))
+	allelefreqs<-gather(df[,c("generation", "invasion", "freqF2", "freqM2")], key="allele", value="frequency", -c("generation", "invasion")) %>%
+		mutate(allele=ifelse(allele=="freqF2", "feminiser", "masculiniser"))
 	
 	ggplot() +
 	#plot the sex frequencies using geom_area
@@ -289,8 +290,8 @@ sex_and_allele_plot<-function(df){
 	#colours
 	scale_fill_manual(values=c(cp[1], "grey80", "grey30", cp[4])) +
 	scale_colour_manual(values=c(cp[2], cp[3])) +
-	basic_theme_border
-
+	basic_theme_border +
+	theme(strip.text.x=element_blank())
 }
 
 invasion_sim_plot<-function(df, type="feminiser"){

@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=create_parameter_grid #Job name
-#SBATCH --mail-type=ALL                    #Mail events (NONE, BEGIN, END, FAIL, ALL)
-#SBATCH --mail-user=xfs20awu@uea.ac.uk           # Where to send mail - change <username> to your  userid
-#SBATCH -t 1:00:00                               # Set time limit to 36 hours
-#SBATCH -o logfiles/%x.out                    #Standard output log  
-#SBATCH -e logfiles/%x.err                     #Standard error log
+#SBATCH --job-name=create_parameter_grid
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=xfs20awu@uea.ac.uk
+#SBATCH -t 1:00:00
+#SBATCH -o logfiles/%x.out
+#SBATCH -e logfiles/%x.err
 #SBATCH --mem 1G
 
 #set up environment
