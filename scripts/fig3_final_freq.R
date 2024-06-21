@@ -3,7 +3,7 @@ source("functions.R")
 #read in the data, which is the final genotype frequency for different parameter combinations
 tbl<-read_tsv("../results/simulations/fig3_final_frequencies.tsv")
 #re-arrange table to give the allele frequencies
-plt_dat<-gather(tbl[,c("feminiser_dominance", "masculiniser_dominance", "feminiser", "masculiniser", "epistatic_dominance", "fem_inv", "masc_inv", "generation")], key="allele", value="frequency", -c("feminiser_dominance", "masculiniser_dominance", "epistatic_dominance", "fem_inv", "masc_inv", "generation"))  %>%
+plt_dat<-gather(tbl[,c("feminiser_dominance", "masculiniser_dominance", "feminiser", "masculiniser", "epistatic_dominance", "generation")], key="allele", value="frequency", -c("feminiser_dominance", "masculiniser_dominance", "epistatic_dominance", "generation"))  %>%
 	mutate(allele=factor(ifelse(allele=="feminiser", #change the names to write them in colour on plot
 	"<b style='color:#d95f02;'>feminiser</b>",
 	"<b style='color:#7570b3;'>masculiniser</b>"
