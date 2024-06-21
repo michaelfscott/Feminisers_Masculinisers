@@ -5,8 +5,8 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(viridis)
-#library(ggpubr)
-#library(ggtext)
+library(ggpubr)
+library(ggtext)
 
 #define output directory 
 plot_dir<-"../figures/"

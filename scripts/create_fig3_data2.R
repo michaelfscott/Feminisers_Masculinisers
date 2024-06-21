@@ -7,7 +7,7 @@ source("functions.R")
 #common parameters
 startFreqF2=0.05
 startFreqM2=0.05
-end=0.000001
+end=0.00001
 
 #how many parameter combinations to be run in each array job
 per_task=400

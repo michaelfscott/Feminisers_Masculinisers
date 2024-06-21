@@ -15,7 +15,7 @@ Rscript --vanilla - <<EOF
 
 source("functions.R")
 
-basename<-"final_frequencies"
+basename<-"^final_frequencies"
 file_list<-list.files(path="../results/simulations/", pattern=basename)
 tbls<-list()
 i=1
@@ -24,12 +24,12 @@ for(i in seq(1,length(file_list))){
 }
 tbl<-do.call(rbind, tbls) %>%
 	mutate(
-	feminiser_dominance=ifelse(B2dom==1, "dominant feminiser", "recessive feminiser"),
-	masculiniser_dominance =ifelse(C2dom==1, "dominant masculiniser", "recessive masculiniser"),
-	epistatic_dominance=ifelse(B2epidom==1, "double mutant female", "double mutant male"),
+	feminiser_dominance=ifelse(F2dom==1, "dominant feminiser", "recessive feminiser"),
+	masculiniser_dominance =ifelse(M2dom==1, "dominant masculiniser", "recessive masculiniser"),
+	epistatic_dominance=ifelse(F2epidom==1, "double mutant female", "double mutant male"),
 	masculiniser=freqM2, 
 	feminiser=freqF2) 
 
-write_tsv(tbl, path="../results/simulations/fig3_final_frequencies.tsv"
+write_tsv(tbl, path="../results/simulations/fig3_final_frequencies.tsv")
 
 EOF
